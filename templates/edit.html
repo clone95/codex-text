@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Edit Item</title>
+</head>
+<body>
+    <h1>Edit Item</h1>
+    <form method="post">
+        <label>Name: <input type="text" name="name" value="{{ item[1] }}" required></label><br>
+        <label>Quantity: <input type="number" name="quantity" value="{{ item[2] }}" min="0" required></label><br>
+        <label>Description: <input type="text" name="description" value="{{ item[3] }}"></label><br>
+        <button type="submit">Save</button>
+        <a href="{{ url_for('index') }}">Cancel</a>
+    </form>
+</body>
+</html>
