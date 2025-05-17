@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Inventory</title>
+    <style>
+        table {border-collapse: collapse; width: 100%;}
+        th, td {border: 1px solid #ccc; padding: 8px; text-align: left;}
+        th {background-color: #f2f2f2;}
+    </style>
+</head>
+<body>
+    <h1>Inventory</h1>
+    <form method="get" action="{{ url_for('index') }}">
+        <input type="text" name="q" placeholder="Search" value="{{ request.args.get('q', '') }}">
+        <select name="sort">
+            <option value="name" {% if request.args.get('sort') == 'name' %}selected{% endif %}>Name</option>
+            <option value="quantity" {% if request.args.get('sort') == 'quantity' %}selected{% endif %}>Quantity</option>
+            <option value="last_updated" {% if request.args.get('sort') == 'last_updated' %}selected{% endif %}>Last Updated</option>
+        </select>
+        <button type="submit">Apply</button>
+        <a href="{{ url_for('export_csv') }}">Export CSV</a>
+    </form>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Description</th>
+            <th>Last Updated</th>
+            <th>Actions</th>
+        </tr>
+        {% for item in items %}
+        <tr>
+            <td>{{ item['name'] }}</td>
+            <td>{{ item['quantity'] }}</td>
+            <td>{{ item['description'] }}</td>
+            <td>{{ item['last_updated'] }}</td>
+            <td>
+                <a href="{{ url_for('edit_item', item_id=item['id']) }}">Edit</a>
+                <form action="{{ url_for('delete_item', item_id=item['id']) }}" method="post" style="display:inline;" onsubmit="return confirm('Delete this item?');">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h2>Add Item</h2>
+    <form action="{{ url_for('add_item') }}" method="post">
+        <label>Name: <input type="text" name="name" required></label><br>
+        <label>Quantity: <input type="number" name="quantity" value="1" min="0" required></label><br>
+        <label>Description: <input type="text" name="description"></label><br>
+        <button type="submit">Add</button>
+    </form>
+</body>
+</html>
